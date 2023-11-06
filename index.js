@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 import connectionToDb from './config/db.js';
 
 const app = express();
-dotenv.config();
-connectionToDb();
+dotenv.config(); //To set our environment variables
+connectionToDb(); // Call the connection to the database
 
 const PORT = process.env.PORT || 4000;
 
