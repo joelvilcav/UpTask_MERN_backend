@@ -1,10 +1,15 @@
 import express from 'express';
 import dotenv from 'dotenv';
+
 import connectionToDb from './config/db.js';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 dotenv.config(); //To set our environment variables
 connectionToDb(); //Call the connection to the database
+
+// Routing
+app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 4000;
 
