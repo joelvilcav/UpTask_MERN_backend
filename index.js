@@ -7,6 +7,7 @@ import userRoutes from './routes/userRoutes.js';
 const app = express();
 dotenv.config(); //To set our environment variables
 connectionToDb(); //Call the connection to the database
+app.use(express.json());
 
 // Routing
 app.use('/api/users', userRoutes);
