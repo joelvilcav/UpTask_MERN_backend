@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import generateIdToken from '../helpers/generateIdToken.js';
+import generateJwt from '../helpers/generateJWT.js';
 
 const create = async (req, res) => {
   // Avoid duplicated email
@@ -44,6 +45,7 @@ const authenticate = async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      tokenJwt: generateJwt(user._id),
     });
   } else {
     const error = new Error('Password is wrong');
