@@ -63,8 +63,8 @@ const confirm = async (req, res) => {
   }
 
   try {
-    userFound.confirmed = true;
-    userFound.token = '';
+    userFound.confirmed = true; // Change the status to true
+    userFound.token = ''; // Reset the token
     await userFound.save();
     res.json({msg: "User correctly confirmed"});
   } catch (error) {
