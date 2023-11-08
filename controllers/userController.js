@@ -1,6 +1,6 @@
 import User from '../models/User.js';
 import generateIdToken from '../helpers/generateIdToken.js';
-import generateJwt from '../helpers/generateJWT.js';
+import generateJwt from '../helpers/generateJwt.js';
 
 const create = async (req, res) => {
   // Avoid duplicated email
