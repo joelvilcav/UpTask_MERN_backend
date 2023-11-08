@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import generateIdToken from '../helpers/generateIdToken.js';
 
 const create = async (req, res) => {
   // Avoid duplicated email
@@ -12,6 +13,7 @@ const create = async (req, res) => {
 
   try {
     const user = new User(req.body);
+    user.token = generateIdToken();
     const userSaved = await user.save();
     res.json(userSaved);
   } catch (error) {
