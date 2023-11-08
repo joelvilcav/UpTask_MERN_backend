@@ -53,6 +53,7 @@ const authenticate = async (req, res) => {
   }
 };
 
+// To confirm if token is valid
 const confirm = async (req, res) => {
   const { token } = req.params;
   const userFound = await User.findOne({ token });
@@ -66,10 +67,29 @@ const confirm = async (req, res) => {
     userFound.confirmed = true; // Change the status to true
     userFound.token = ''; // Reset the token
     await userFound.save();
-    res.json({msg: "User correctly confirmed"});
+    res.json({ msg: 'User correctly confirmed' });
   } catch (error) {
     console.log(error);
   }
 };
 
-export { create, authenticate, confirm };
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  // Verify if user exists
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    const error = new Error('User does not exist');
+    res.status(404).json({ msg: error.message });
+  }
+
+  try {
+    user.token = generateIdToken();
+    await user.save();
+    res.json({ msg: 'Email sent with steps to follow' });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { create, authenticate, confirm, forgotPassword };
