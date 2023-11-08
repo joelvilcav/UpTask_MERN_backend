@@ -1,4 +1,5 @@
 import Project from '../models/Project.js';
+import Task from '../models/Task.js';
 
 const getProjects = async (req, res) => {
   const projects = await Project.find().where('owner').equals(req.user);
@@ -30,7 +31,13 @@ const getProject = async (req, res) => {
     return res.status(401).json({ msg: error.message });
   }
 
-  res.json(project);
+  // Get tasks belonging to the project
+  const tasks = await Task.find().where('project').equals(project._id);
+
+  res.json({
+    project,
+    tasks,
+  });
 };
 
 const updateProject = async (req, res) => {
@@ -76,17 +83,15 @@ const deleteProject = async (req, res) => {
 
   try {
     await project.deleteOne();
-    res.json({msg: 'Project deleted'})
+    res.json({ msg: 'Project deleted' });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
 const addCollaborator = async (req, res) => {};
 
 const deleteCollaborator = async (req, res) => {};
-
-const getTasks = async (req, res) => {};
 
 export {
   getProjects,
@@ -96,5 +101,4 @@ export {
   deleteCollaborator,
   deleteProject,
   addCollaborator,
-  getTasks,
 };
