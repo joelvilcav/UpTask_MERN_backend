@@ -60,7 +60,27 @@ const updateProject = async (req, res) => {
   }
 };
 
-const deleteProject = async (req, res) => {};
+const deleteProject = async (req, res) => {
+  const { id } = req.params;
+  const project = await Project.findById(id);
+
+  if (!project) {
+    return res.status(404).json({ msg: 'Not found' });
+  }
+
+  // Check if the projects belongs to the owner
+  if (project.owner.toString() !== req.user._id.toString()) {
+    const error = new Error('Invalid action');
+    return res.status(401).json({ msg: error.message });
+  }
+
+  try {
+    await project.deleteOne();
+    res.json({msg: 'Project deleted'})
+  } catch (error) {
+    console.log(error)
+  }
+};
 
 const addCollaborator = async (req, res) => {};
 
