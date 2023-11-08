@@ -104,4 +104,31 @@ const verifyToken = async (req, res) => {
   }
 };
 
-export { create, authenticate, confirm, forgotPassword, verifyToken };
+const newPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  const user = await User.findOne({ token });
+  if (user) {
+    user.password = password;
+    user.token = '';
+    try {
+      await user.save();
+      res.json({ msg: 'Password changed successfully' });
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    const error = new Error('Token is not valid');
+    res.status(404).json({ msg: error.message });
+  }
+};
+
+export {
+  create,
+  authenticate,
+  confirm,
+  forgotPassword,
+  verifyToken,
+  newPassword,
+};
