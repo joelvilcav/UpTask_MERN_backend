@@ -12,7 +12,7 @@ const createTask = async (req, res) => {
 
   if (projectFound.owner.toString() !== req.user._id.toString()) {
     const error = new Error('You are not allowed to add tasks');
-    return res.status(401).json({ msg: error.message });
+    return res.status(403).json({ msg: error.message });
   }
 
   try {
@@ -23,7 +23,22 @@ const createTask = async (req, res) => {
   }
 };
 
-const getTask = async (req, res) => {};
+const getTask = async (req, res) => {
+  const { id } = req.params;
+  const task = await Task.findById(id).populate('project');
+
+  if (!task) {
+    const error = new Error('Task not found');
+    return res.status(404).json({ msg: error.message });
+  }
+
+  if (task.project.owner.toString() !== req.user._id.toString()) {
+    const error = new Error('You are not allowed to add tasks');
+    return res.status(403).json({ msg: error.message });
+  }
+
+  res.json(task);
+};
 
 const updateTask = async (req, res) => {};
 
