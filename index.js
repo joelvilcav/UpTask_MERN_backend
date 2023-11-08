@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 
 import connectionToDb from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
-import projectRoutes from './routes/projectRoutes.js'
+import projectRoutes from './routes/projectRoutes.js';
+import taskRoutes from './routes/taskRoutes.js';
 
 const app = express();
 dotenv.config(); //To set our environment variables
@@ -13,6 +14,7 @@ app.use(express.json());
 // Routing
 app.use('/api/users', userRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/tasks', taskRoutes);
 
 const PORT = process.env.PORT || 4000;
 
