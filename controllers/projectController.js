@@ -33,7 +33,32 @@ const getProject = async (req, res) => {
   res.json(project);
 };
 
-const updateProject = async (req, res) => {};
+const updateProject = async (req, res) => {
+  const { id } = req.params;
+  const project = await Project.findById(id);
+
+  if (!project) {
+    return res.status(404).json({ msg: 'Not found' });
+  }
+
+  // Check if the projects belongs to the owner
+  if (project.owner.toString() !== req.user._id.toString()) {
+    const error = new Error('Invalid action');
+    return res.status(401).json({ msg: error.message });
+  }
+
+  project.name = req.body.name || project.name;
+  project.description = req.body.description || project.description;
+  project.deadline = req.body.deadline || project.deadline;
+  project.client = req.body.client || project.client;
+
+  try {
+    const projectSaved = await project.save();
+    res.json(projectSaved);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const deleteProject = async (req, res) => {};
 
