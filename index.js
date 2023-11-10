@@ -13,7 +13,7 @@ connectionToDb(); //Call the connection to the database
 app.use(express.json());
 
 // CORS configuration
-const whitelist = ['http://localhost:5173'];
+const whitelist = [process.env.FRONTEND_URL];
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.includes(origin)) {
