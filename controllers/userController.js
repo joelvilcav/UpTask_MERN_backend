@@ -15,8 +15,10 @@ const create = async (req, res) => {
   try {
     const user = new User(req.body);
     user.token = generateIdToken();
-    const userSaved = await user.save();
-    res.json(userSaved);
+    await user.save();
+    res.json({
+      msg: 'User created propertly, check your email to confirm your account',
+    });
   } catch (error) {
     console.log(error);
   }
