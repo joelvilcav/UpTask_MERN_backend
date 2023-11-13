@@ -1,6 +1,7 @@
 import User from '../models/User.js';
 import generateIdToken from '../helpers/generateIdToken.js';
 import generateJwt from '../helpers/generateJwt.js';
+import { registerEmail } from '../helpers/email.js';
 
 const create = async (req, res) => {
   // Avoid duplicated email
@@ -16,6 +17,14 @@ const create = async (req, res) => {
     const user = new User(req.body);
     user.token = generateIdToken();
     await user.save();
+
+    // Sent confirmation email
+    registerEmail({
+      name: user.name,
+      email: user.email,
+      token: user.token,
+    });
+
     res.json({
       msg: 'User created propertly, check your email to confirm your account',
     });
