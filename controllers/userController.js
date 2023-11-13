@@ -1,7 +1,7 @@
 import User from '../models/User.js';
 import generateIdToken from '../helpers/generateIdToken.js';
 import generateJwt from '../helpers/generateJwt.js';
-import { registerEmail } from '../helpers/email.js';
+import { registerEmail, recoverPassword } from '../helpers/email.js';
 
 const create = async (req, res) => {
   // Avoid duplicated email
@@ -97,6 +97,14 @@ const forgotPassword = async (req, res) => {
   try {
     user.token = generateIdToken();
     await user.save();
+
+    // Sent email
+    recoverPassword({
+      name: user.name,
+      email: user.email,
+      token: user.token,
+    })
+
     res.json({ msg: 'Email sent with steps to follow' });
   } catch (error) {
     console.log(error);
