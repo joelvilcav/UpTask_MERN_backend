@@ -41,13 +41,13 @@ const authenticate = async (req, res) => {
 
   if (!user) {
     const error = new Error('User does not exist');
-    res.status(404).json({ msg: error.message });
+    return res.status(404).json({ msg: error.message });
   }
 
   // Verify if its email is confirmed
   if (!user.confirmed) {
     const error = new Error('User is not confirmed yet');
-    res.status(403).json({ msg: error.message });
+    return res.status(403).json({ msg: error.message });
   }
 
   // Verify if its password is correct
@@ -60,7 +60,7 @@ const authenticate = async (req, res) => {
     });
   } else {
     const error = new Error('Password is wrong');
-    res.status(403).json({ msg: error.message });
+    return res.status(403).json({ msg: error.message });
   }
 };
 
