@@ -10,7 +10,7 @@ const create = async (req, res) => {
 
   if (userExisted) {
     const error = new Error('User already exists');
-    res.status(400).send({ msg: error.message });
+    return res.status(400).send({ msg: error.message });
   }
 
   try {
@@ -71,7 +71,7 @@ const confirm = async (req, res) => {
 
   if (!userFound) {
     const error = new Error('Token is invalid');
-    res.status(403).json({ msg: error.message });
+    return res.status(403).json({ msg: error.message });
   }
 
   try {
@@ -91,7 +91,7 @@ const forgotPassword = async (req, res) => {
 
   if (!user) {
     const error = new Error('User does not exist');
-    res.status(404).json({ msg: error.message });
+    return res.status(404).json({ msg: error.message });
   }
 
   try {
@@ -117,7 +117,7 @@ const verifyToken = async (req, res) => {
 
   if (!tokenValid) {
     const error = new Error('Token is not valid');
-    res.status(404).json({ msg: error.message });
+    return res.status(404).json({ msg: error.message });
   } else {
     res.json({ msg: 'Token is valid and the user exists' });
   }
