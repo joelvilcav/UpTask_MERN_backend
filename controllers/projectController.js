@@ -2,10 +2,9 @@ import Project from '../models/Project.js';
 import User from '../models/User.js';
 
 const getProjects = async (req, res) => {
-  const projects = await Project.find()
-    .where('owner')
-    .equals(req.user)
-    .select('-tasks');
+  const projects = await Project.find({
+    $or: [{ collaborators: { $in: req.user } }, { owner: { $in: req.user } }],
+  }).select('-tasks');
   res.json(projects);
 };
 
