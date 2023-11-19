@@ -22,7 +22,9 @@ const createProjects = async (req, res) => {
 
 const getProject = async (req, res) => {
   const { id } = req.params;
-  const project = await Project.findById(id).populate('tasks');
+  const project = await Project.findById(id)
+    .populate('tasks')
+    .populate('collaborators', 'name email');
 
   if (!project) {
     return res.status(404).json({ msg: 'Not found' });
