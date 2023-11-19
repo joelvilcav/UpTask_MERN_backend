@@ -142,7 +142,23 @@ const addCollaborator = async (req, res) => {
   res.json({ msg: 'Collaborator Propertly Added' });
 };
 
-const deleteCollaborator = async (req, res) => {};
+const deleteCollaborator = async (req, res) => {
+  const project = await Project.findById(req.params.id);
+
+  if (!project) {
+    const error = new Error('Project not found');
+    return res.status(404).json({ msg: error.message });
+  }
+
+  if (project.owner.toString() !== req.user._id.toString()) {
+    const error = new Error('Invalid action');
+    return res.status(404).json({ msg: error.message });
+  }
+
+  project.collaborators.pull(req.body.id);
+  await project.save();
+  res.json({ msg: 'Collaborator Propertly Deleted' });
+};
 
 export {
   getProjects,
