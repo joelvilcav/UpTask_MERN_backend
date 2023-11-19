@@ -100,7 +100,45 @@ const searchCollaborator = async (req, res) => {
   res.json(user);
 };
 
-const addCollaborator = async (req, res) => {};
+const addCollaborator = async (req, res) => {
+  const project = await Project.findById(req.params.id);
+
+  if (!project) {
+    const error = new Error('Project not found');
+    return res.status(404).json({ msg: error.message });
+  }
+
+  if (project.owner.toString() !== req.user._id.toString()) {
+    const error = new Error('Invalid action');
+    return res.status(404).json({ msg: error.message });
+  }
+
+  const { email } = req.body;
+  const user = await User.findOne({ email }).select(
+    '-confirmed -createdAt -updatedAt -password -token -__v'
+  );
+
+  if (!user) {
+    const error = new Error('User not found');
+    return res.status(404).json({ msg: error.message });
+  }
+
+  // Avoid owner being collaborator
+  if (project.owner.toString() === user._id.toString()) {
+    const error = new Error('Project owner can not be a collaborator');
+    return res.status(404).json({ msg: error.message });
+  }
+
+  // Check if a collaborator is not already added
+  if (project.collaborators.includes(user._id)) {
+    const error = new Error('User is already added to the project');
+    return res.status(404).json({ msg: error.message });
+  }
+
+  project.collaborators.push(user._id);
+  await project.save();
+  res.json({ msg: 'Collaborator Propertly Added' });
+};
 
 const deleteCollaborator = async (req, res) => {};
 
