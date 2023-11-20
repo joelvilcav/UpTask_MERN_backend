@@ -85,7 +85,9 @@ const deleteTask = async (req, res) => {
   }
 
   try {
-    await task.deleteOne();
+    const project = await Project.findById(task.project);
+    project.tasks.pull(task._id);
+    await Promise.allSettled([await project.save(), await task.deleteOne()]);
     res.json({ msg: 'Task deleted' });
   } catch (error) {
     console.log(error);
