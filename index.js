@@ -59,7 +59,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on('new task', (task) => {
-    const project  = task.project;
+    const project = task.project;
     socket.to(project).emit('task added', task);
+  });
+
+  socket.on('delete task', (task) => {
+    const project = task.project;
+    socket.to(project).emit('task deleted', task);
   });
 });
