@@ -30,7 +30,12 @@ const getProject = async (req, res) => {
   }
 
   // Check if the projects belongs to the owner
-  if (project.owner.toString() !== req.user._id.toString()) {
+  if (
+    project.owner.toString() !== req.user._id.toString() &&
+    !project.collaborators.some(
+      (collaborator) => collaborator._id.toString() === req.user._id.toString()
+    )
+  ) {
     const error = new Error('Invalid action');
     return res.status(401).json({ msg: error.message });
   }
