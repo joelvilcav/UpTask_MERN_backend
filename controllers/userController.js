@@ -1,6 +1,6 @@
 import User from '../models/User.js';
 import generateIdToken from '../helpers/generateIdToken.js';
-import generateJwt from '../helpers/generateJwt.js';
+import generateJwt from '../helpers/generateJWT.js';
 import { registerEmail, recoverPassword } from '../helpers/email.js';
 
 const create = async (req, res) => {
